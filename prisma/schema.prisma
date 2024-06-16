@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,9 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model words{
-  id Int @id @default(autoincrement())
-  word String
-  translation String
-  isRegularVerb Boolean
+model Grammar {
+  id         BigInt  @id @unique(map: "id") @default(autoincrement()) @db.UnsignedBigInt
+  topic      String  @db.Text
+  definition String  @db.Text
+  examples   String? @db.VarChar(1000)
+  type       Int?
+
+  @@map("grammar")
+}
+
+model WordTypes {
+  id    Int     @id @default(autoincrement())
+  type  String  @db.VarChar(50)
+  words Words[]
+
+  @@map("word_types")
+}
+
+model Words {
+  id           Int        @id @default(autoincrement())
+  word         String
+  translation  String
+  type         Int?
+  auxString1   String?    @db.VarChar(50)
+  auxString2   String?    @db.VarChar(50)
+  isAuxBoolean Boolean
+  word_types   WordTypes? @relation(fields: [type], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "words_type_fk")
+
+  @@index([type], map: "words_type_fk")
+  @@map("words")
 }

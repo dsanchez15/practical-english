@@ -1,77 +1,25 @@
-"use client";
-import { useEffect, useState } from "react";
-
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/carousel";
-import { Button } from "@/components/ui/button";
-
-export default function HomePage() {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
-
-
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
-  }, [api]);
-
-  function setPreviosd() {
-    api?.scrollPrev();
-  }
-
-  function setNextd() {
-    api?.scrollNext();
-  }
+export default async function HomePage() {
+  const items = [
+    {
+      id: 1,
+      text: `Past tense\nWhere were you born?\nI was born in Argentina.\nWere you born in Buenos Aires?\nYes, I was.\nNo, I wasn't. I was born in Córdoba.\nWhen did you move to Los Angeles?\nI moved here 10 years ago. I didn't speak English.\nDid you take English classes in Argentina?\nYes, I did. I took classes for a year.\nNo, I didn't. My aunt taught me at home.`,
+    },
+    { id: 2, text: "Card 2" },
+    { id: 3, text: "Card 3" },
+    { id: 4, text: "Card 4" },
+    { id: 5, text: "Card 5" },
+    { id: 6, text: "Card 6" },
+    { id: 7, text: "Card 7" },
+    { id: 8, text: "Card 8" },
+    { id: 9, text: "Card 9" },
+  ];
   return (
-    <div className="grid justify-center">
-      <Carousel setApi={setApi} className="w-full max-w-xs">
-        <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index}>
-              <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
-                </CardContent>
-              </Card>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
-      <div className="py-2 text-center text-sm text-muted-foreground">
-        Slide {current} of {count}
-      </div>
-      <div className="flex justify-end gap-4">
-        <Button
-          onClick={() => {
-            setPreviosd();
-          }}
-        >
-          Previous
-        </Button>
-        <Button
-          onClick={() => {
-            setNextd();
-          }}
-        >
-          Next
-        </Button>
-      </div>
+    <div className="grid grid-cols-3 gap-4 p-4">
+      {items.map((item) => (
+        <div key={item.id} className="bg-gray-100 p-4 rounded-lg shadow-md">
+          <p className="text-center">{item.text}</p>
+        </div>
+      ))}
     </div>
   );
 }
